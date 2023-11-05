@@ -1,7 +1,8 @@
 const express = require("express");
-const { config } = require("dotenv");
 const morgan = require("morgan");
 const cors = require("cors");
+const { config } = require("dotenv");
+const { graphqlHTTP } = require("express-graphql");
 // Custom Imports
 const globalErrorHandler = require("./controllers/errorController");
 const AppError = require("./utils/appError");
@@ -27,6 +28,7 @@ app.get("/", (req, res) => {
 });
 
 // ROUTES
+app.use("/graphql", graphqlHTTP({ schema: null, graphiql: true }));
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

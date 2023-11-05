@@ -14,3 +14,5 @@ const BlogType = new GraphQLObjectType({
     date: { type: GraphQLNonNull(GraphQLString) },
   }),
 });
+
+module.exports = BlogType;

@@ -12,3 +12,5 @@ const CommentType = new GraphQLObjectType({
     text: { type: GraphQLNonNull(GraphQLString) },
   }),
 });
+
+module.exports = CommentType;

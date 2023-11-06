@@ -50,7 +50,6 @@ const resolvers = {
       if (!user || !(await bcrypt.compare(password, user.password))) {
         throw new AppError("Invalid email or password", 401);
       }
-
       return user;
     },
   },

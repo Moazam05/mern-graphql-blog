@@ -6,6 +6,7 @@ const { graphqlHTTP } = require("express-graphql");
 // Custom Imports
 const globalErrorHandler = require("./controllers/errorController");
 const AppError = require("./utils/appError");
+const UserSchema = require("./graphql/schema/userSchema");
 
 // Dotenv config
 config();
@@ -28,7 +29,7 @@ app.get("/", (req, res) => {
 });
 
 // ROUTES
-app.use("/graphql", graphqlHTTP({ schema: null, graphiql: true }));
+app.use("/graphql/users", graphqlHTTP({ schema: UserSchema, graphiql: true }));
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

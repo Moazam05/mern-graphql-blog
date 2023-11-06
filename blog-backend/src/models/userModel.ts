@@ -19,6 +19,18 @@ const userSchema = new mongoose.Schema({
     minLength: 8,
     // select: false,
   },
+  blogs: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Blog",
+    },
+  ],
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment",
+    },
+  ],
 });
 
 const User = new mongoose.model("User", userSchema);

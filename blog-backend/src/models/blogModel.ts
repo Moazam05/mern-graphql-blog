@@ -18,6 +18,16 @@ const blogSchema = new mongoose.Schema({
     type: Date,
     default: null,
   },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+  },
+  comments: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "Comment",
+    },
+  ],
 });
 
 const Blog = mongoose.model("Blog", blogSchema);

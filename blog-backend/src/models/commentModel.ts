@@ -8,7 +8,14 @@ const commentSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now(),
-    // required: true, // Tutorial instructor and not in Graphql Schema
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  blog: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Blog",
   },
 });
 

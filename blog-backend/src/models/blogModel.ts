@@ -13,7 +13,10 @@ const blogSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now(),
-    // required: true, // Tutorial instructor
+  },
+  updatedAt: {
+    type: Date,
+    default: null,
   },
 });
 

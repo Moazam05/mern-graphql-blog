@@ -19,6 +19,7 @@ type Query {
 type Mutation {
   addBlog(title: String!, content: String!): BlogType
   updateBlog(id: ID!, title: String!, content: String!): BlogType
+  deleteBlog(id: ID!): BlogType
 }
 `;
 
@@ -55,6 +56,17 @@ const resolvers = {
       } catch (error) {
         throw new AppError(error.message, 500);
       }
+    },
+    // delete blog
+    deleteBlog: async (_, { id }) => {
+      try {
+        // check if blog exists
+        const existingBlog = await Blog.findById(id);
+        if (!existingBlog) return new AppError("Blog does not exist");
+
+        const deletedBlog = await Blog.findByIdAndDelete(id);
+        return deletedBlog;
+      } catch (error) {}
     },
   },
 };

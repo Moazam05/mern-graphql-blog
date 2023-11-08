@@ -11,6 +11,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/userModel");
 const Blog = require("../models/blogModel");
 const Comment = require("../models/commentModel");
+const AppError = require("../utils/appError");
 
 // User Type
 const UserType = new GraphQLObjectType({
@@ -31,7 +32,7 @@ const BlogType = new GraphQLObjectType({
     title: { type: GraphQLString },
     content: { type: GraphQLString },
     date: { type: GraphQLString },
-    // updatedAt: { type: GraphQLString },
+    updatedAt: { type: GraphQLString },
     // user: {
     //   type: UserType,
     //   resolve(parent, args) {
@@ -81,7 +82,8 @@ const RootQuery = new GraphQLObjectType({
 const mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
-    // Add a User
+    // todo User Section
+    // Create a User
     signup: {
       type: UserType,
       args: {
@@ -109,13 +111,69 @@ const mutation = new GraphQLObjectType({
       async resolve(parent, { email, password }) {
         const user = await User.findOne({ email });
         if (!user) {
-          throw new Error("User not found");
+          throw new AppError("User not found", 404);
         }
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-          throw new Error("Incorrect password");
+          throw new AppError("Incorrect password", 401);
         }
         return user;
+      },
+    },
+    // todo Blog Section
+    // Create a Blog
+    addBlog: {
+      type: BlogType,
+      args: {
+        title: { type: new GraphQLNonNull(GraphQLString) },
+        content: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      async resolve(parent, { title, content }) {
+        const blog = new Blog({
+          title,
+          content,
+        });
+        return await blog.save();
+      },
+    },
+    // Update a Blog
+    updateBlog: {
+      type: BlogType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        title: { type: new GraphQLNonNull(GraphQLString) },
+        content: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      async resolve(parent, { id, title, content }) {
+        // check if blog exists
+        const existingBlog = await Blog.findById(id);
+        if (!existingBlog) {
+          throw new AppError("Blog not found", 404);
+        }
+
+        const updateBlog = await Blog.findByIdAndUpdate(
+          id,
+          { title, content, updatedAt: new Date() },
+          { new: true }
+        );
+        return updateBlog;
+      },
+    },
+    // Delete a Blog
+    deleteBlog: {
+      type: BlogType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      async resolve(parent, { id }) {
+        // check if blog exists
+        const existingBlog = await Blog.findById(id);
+        if (!existingBlog) {
+          throw new AppError("Blog not found", 404);
+        }
+
+        const deleteBlog = await Blog.findByIdAndDelete(id);
+        return deleteBlog;
       },
     },
   },

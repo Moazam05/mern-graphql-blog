@@ -21,6 +21,18 @@ const UserType = new GraphQLObjectType({
     name: { type: GraphQLString },
     email: { type: GraphQLString },
     password: { type: GraphQLString },
+    blogs: {
+      type: new GraphQLList(BlogType),
+      async resolve(parent, args) {
+        return await Blog.find({ user: parent.id });
+      },
+    },
+    comments: {
+      type: new GraphQLList(CommentType),
+      async resolve(parent, args) {
+        return await Comment.find({ user: parent.id });
+      },
+    },
   }),
 });
 
@@ -33,12 +45,18 @@ const BlogType = new GraphQLObjectType({
     content: { type: GraphQLString },
     date: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
-    // user: {
-    //   type: UserType,
-    //   resolve(parent, args) {
-    //     return User.findById(parent.user);
-    //   },
-    // },
+    user: {
+      type: UserType,
+      async resolve(parent, args) {
+        return await User.findById(parent.user);
+      },
+    },
+    comments: {
+      type: new GraphQLList(CommentType),
+      async resolve(parent, args) {
+        return await Comment.find({ blog: parent.id });
+      },
+    },
   }),
 });
 
@@ -48,6 +66,18 @@ const CommentType = new GraphQLObjectType({
     id: { type: GraphQLID },
     text: { type: GraphQLString },
     date: { type: GraphQLString },
+    user: {
+      type: UserType,
+      async resolve(parent, args) {
+        return await User.findById(parent.user);
+      },
+    },
+    blog: {
+      type: BlogType,
+      async resolve(parent, args) {
+        return await Blog.findById(parent.blog);
+      },
+    },
   }),
 });
 

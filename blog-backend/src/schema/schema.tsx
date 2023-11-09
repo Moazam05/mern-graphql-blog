@@ -1,3 +1,5 @@
+import { startSession } from "mongoose";
+
 const {
   GraphQLObjectType,
   GraphQLID,
@@ -157,15 +159,28 @@ const mutation = new GraphQLObjectType({
       args: {
         title: { type: new GraphQLNonNull(GraphQLString) },
         content: { type: new GraphQLNonNull(GraphQLString) },
+        userId: { type: new GraphQLNonNull(GraphQLID) }, // Add a new argument for userId
       },
-      async resolve(parent, { title, content }) {
-        const blog = new Blog({
-          title,
-          content,
-        });
-        return await blog.save();
+      async resolve(parent, { title, content, userId }) {
+        const session = await startSession();
+        try {
+          session.startTransaction({ session });
+          const blog = new Blog({ title, content, user: userId });
+          const existingUser = await User.findById(userId);
+          if (!existingUser) {
+            throw new AppError("User not found", 404);
+          }
+          existingUser.blogs.push(blog);
+          await existingUser.save({ session });
+          return await blog.save();
+        } catch (error) {
+          throw new AppError("Error saving blog", 500);
+        } finally {
+          await session.commitTransaction();
+        }
       },
     },
+
     // Update a Blog
     updateBlog: {
       type: BlogType,

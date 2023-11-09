@@ -1,5 +1,4 @@
 import { startSession } from "mongoose";
-
 const {
   GraphQLObjectType,
   GraphQLID,
@@ -180,7 +179,6 @@ const mutation = new GraphQLObjectType({
         }
       },
     },
-
     // Update a Blog
     updateBlog: {
       type: BlogType,

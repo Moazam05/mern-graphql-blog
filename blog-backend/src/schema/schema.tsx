@@ -165,12 +165,13 @@ const mutation = new GraphQLObjectType({
         try {
           session.startTransaction({ session });
           const blog = new Blog({ title, content, user: userId });
+
           const existingUser = await User.findById(userId);
-          if (!existingUser) {
-            throw new AppError("User not found", 404);
-          }
+          if (!existingUser) return new AppError("User not found", 404);
+
           existingUser.blogs.push(blog);
           await existingUser.save({ session });
+
           return await blog.save();
         } catch (error) {
           throw new AppError("Error saving blog", 500);
@@ -209,14 +210,27 @@ const mutation = new GraphQLObjectType({
         id: { type: new GraphQLNonNull(GraphQLID) },
       },
       async resolve(parent, { id }) {
-        // check if blog exists
-        const existingBlog = await Blog.findById(id);
-        if (!existingBlog) {
-          throw new AppError("Blog not found", 404);
-        }
+        const session = await startSession();
 
-        const deleteBlog = await Blog.findByIdAndDelete(id);
-        return deleteBlog;
+        try {
+          session.startTransaction({ session });
+          const existingBlog = await Blog.findById(id).populate("user");
+          if (!existingBlog) return new AppError("Blog not found", 404);
+
+          const existingUser = existingBlog.user;
+          if (!existingUser)
+            return new AppError("No user linked to this blog", 404);
+
+          existingUser.blogs.pull(existingBlog);
+          await existingUser.save({ session });
+
+          const deleteBlog = await Blog.findByIdAndDelete(id);
+          return deleteBlog;
+        } catch (error) {
+          throw new AppError("Error deleting blog", 500);
+        } finally {
+          session.commitTransaction();
+        }
       },
     },
   },

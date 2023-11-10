@@ -233,6 +233,42 @@ const mutation = new GraphQLObjectType({
         }
       },
     },
+    // todo Comment Section
+    // Create a Comment to a blog
+    addCommentToBlog: {
+      type: CommentType,
+      args: {
+        text: { type: new GraphQLNonNull(GraphQLString) },
+        blogId: { type: new GraphQLNonNull(GraphQLID) },
+        userId: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      async resolve(parent, { text, blogId, userId }) {
+        const session = await startSession();
+        try {
+          session.startTransaction({ session });
+
+          const comment = new Comment({ text, user: userId, blog: blogId });
+
+          const existingBlog = await Blog.findById(blogId);
+          if (!existingBlog) return new AppError("Blog not found", 404);
+
+          const existingUser = await User.findById(userId);
+          if (!existingUser) return new AppError("User not found", 404);
+
+          existingUser.comments.push(comment);
+          await existingUser.save({ session });
+
+          existingBlog.comments.push(comment);
+          await existingBlog.save({ session });
+
+          return await comment.save();
+        } catch (error) {
+          throw new AppError("Error saving comment", 500);
+        } finally {
+          await session.commitTransaction();
+        }
+      },
+    },
   },
 });
 

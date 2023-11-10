@@ -269,6 +269,45 @@ const mutation = new GraphQLObjectType({
         }
       },
     },
+    // delete a comment from blog
+    deleteComment: {
+      type: CommentType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      async resolve(parent, { id }) {
+        const session = await startSession();
+        try {
+          session.startTransaction({ session });
+
+          const existingComment = await Comment.findById(id)
+            .populate("user")
+            .populate("blog");
+          if (!existingComment) return new AppError("Comment not found", 404);
+
+          const existingUser = existingComment.user;
+          if (!existingUser)
+            return new AppError("No user linked to this comment", 404);
+
+          existingUser.comments.pull(existingComment);
+          await existingUser.save({ session });
+
+          const existingBlog = existingComment.blog;
+          if (!existingBlog)
+            return new AppError("No blog linked to this comment", 404);
+
+          existingBlog.comments.pull(existingComment);
+          await existingBlog.save({ session });
+
+          const deleteComment = await Comment.findByIdAndDelete(id);
+          return deleteComment;
+        } catch (error) {
+          throw new AppError("Error deleting comment", 500);
+        } finally {
+          session.commitTransaction();
+        }
+      },
+    },
   },
 });
 

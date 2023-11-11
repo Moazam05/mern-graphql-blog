@@ -2,8 +2,10 @@ import { useState } from "react";
 import { Box, AppBar, Toolbar, Tabs, Tab, Button } from "@mui/material";
 import { ImBlogger } from "react-icons/im";
 import { BiLogInCircle } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
   const [value, setValue] = useState(0);
   return (
     <>
@@ -32,8 +34,18 @@ const Header = () => {
               value={value}
               onChange={(e, val) => setValue(val)}
             >
-              <Tab label="Home" />
-              <Tab label="Blogs" />
+              <Tab
+                label="Home"
+                onClick={() => {
+                  navigate("/");
+                }}
+              />
+              <Tab
+                label="Blogs"
+                onClick={() => {
+                  navigate("/blogs");
+                }}
+              />
             </Tabs>
             <Button
               sx={{
@@ -47,6 +59,9 @@ const Header = () => {
                 },
               }}
               endIcon={<BiLogInCircle />}
+              onClick={() => {
+                navigate("/login");
+              }}
             >
               Log In
             </Button>

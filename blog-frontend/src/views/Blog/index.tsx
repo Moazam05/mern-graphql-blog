@@ -7,7 +7,12 @@ import BlogList from "./components/BlogList";
 const Blog = () => {
   const { data, loading, error } = useQuery(GET_BLOGS);
 
-  if (loading) return <Spinner />;
+  if (loading)
+    return (
+      <Box sx={{ height: "50vh", marginTop: "25vh" }}>
+        <Spinner />
+      </Box>
+    );
   if (error) return <div>Something Went Wrong...!</div>;
 
   return (

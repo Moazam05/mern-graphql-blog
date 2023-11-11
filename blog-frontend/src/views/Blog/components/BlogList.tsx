@@ -12,8 +12,7 @@ const BlogList = (props: Props) => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "center",
-          gap: 10,
+          gap: 2,
           flexWrap: "wrap",
           mt: 1,
           mb: 1,

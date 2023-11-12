@@ -1,19 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Form, Formik, FormikProps } from "formik";
 import { loginSchema } from "./Components/validationSchema";
-import {
-  Button,
-  ToggleButton,
-  ToggleButtonGroup,
-  Box,
-  Paper,
-} from "@mui/material";
+import { Button, ToggleButton, ToggleButtonGroup, Box } from "@mui/material";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { onKeyDown } from "../../utils";
 import PrimaryInput from "../../Components/PrimaryInput/PrimaryInput";
 import { SubHeading } from "../../Components/Heading";
 import ToastAlert from "../../Components/ToastAlert/ToastAlert";
 import { CiLock } from "react-icons/ci";
+import Signup from "../Signup";
 
 interface ISLoginForm {
   email: string;
@@ -24,6 +19,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [selectedForm, setSelectedForm] = useState("login");
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [formValues, setFormValues] = useState<ISLoginForm>({
     email: "",
     password: "",
@@ -48,7 +44,9 @@ const Login = () => {
     }
   };
 
-  const LoginHandler = async (data: ISLoginForm) => {};
+  const LoginHandler = async (data: ISLoginForm) => {
+    console.log("payload", data);
+  };
 
   return (
     <div>
@@ -57,7 +55,6 @@ const Login = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          // height: "100vh",
           margin: "25px 0",
         }}
       >
@@ -74,6 +71,7 @@ const Login = () => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              marginTop: "10px",
             }}
           >
             <Box
@@ -105,6 +103,7 @@ const Login = () => {
                 aria-label="login"
                 sx={{
                   width: "50%",
+                  textTransform: "Capitalize",
                   "&.Mui-selected": {
                     backgroundColor: "#f50057",
                     color: "#fff",
@@ -118,6 +117,7 @@ const Login = () => {
                 aria-label="signup"
                 sx={{
                   width: "50%",
+                  textTransform: "Capitalize",
                   "&.Mui-selected": {
                     backgroundColor: "#f50057",
                     color: "#fff",
@@ -219,7 +219,11 @@ const Login = () => {
               </Formik>
             </>
           )}
-          {selectedForm === "signup" && "Signup"}
+          {selectedForm === "signup" && (
+            <>
+              <Signup />
+            </>
+          )}
         </Box>
       </Box>
       <ToastAlert

@@ -7,6 +7,8 @@ import PrimaryInput from "../../Components/PrimaryInput/PrimaryInput";
 import ToastAlert from "../../Components/ToastAlert/ToastAlert";
 import { SubHeading } from "../../Components/Heading";
 import { signupSchema } from "./Components/validationSchema";
+import { useMutation } from "@apollo/client";
+import { SIGNUP_USER } from "./graphql/signupMutation";
 
 interface ISSignupForm {
   name: string;
@@ -14,7 +16,11 @@ interface ISSignupForm {
   password: string;
 }
 
-const Signup = () => {
+interface Props {
+  setSelectedForm: (form: string) => void;
+}
+
+const Signup = (props: Props) => {
   const [showPassword, setShowPassword] = useState(false);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -37,8 +43,42 @@ const Signup = () => {
     setToast({ ...toast, appearence: false });
   };
 
+  const [signup] = useMutation(SIGNUP_USER, {
+    onError(error) {
+      setToast({
+        message: error.message,
+        appearence: true,
+        type: "error",
+      });
+    },
+  });
+
   const signupHandler = async (data: ISSignupForm) => {
-    console.log("payload", data);
+    const response = await signup({
+      variables: {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      },
+    });
+    if (response.data) {
+      setToast({
+        message: "User created successfully.",
+        appearence: true,
+        type: "success",
+      });
+      setTimeout(() => {
+        props.setSelectedForm("login");
+      }, 2000);
+    }
+    try {
+    } catch (error: any) {
+      setToast({
+        message: "Something went wrong.",
+        appearence: true,
+        type: "error",
+      });
+    }
   };
 
   return (

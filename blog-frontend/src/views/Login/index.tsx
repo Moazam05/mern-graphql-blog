@@ -221,7 +221,7 @@ const Login = () => {
           )}
           {selectedForm === "signup" && (
             <>
-              <Signup />
+              <Signup setSelectedForm={setSelectedForm} />
             </>
           )}
         </Box>

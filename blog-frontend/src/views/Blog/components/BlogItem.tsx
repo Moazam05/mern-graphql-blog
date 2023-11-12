@@ -1,6 +1,6 @@
 import { BlogType } from "../../../Components/types";
 import { Box } from "@mui/material";
-import { parseAndFormatTimestamp } from "../../../utils/utils";
+import { parseAndFormatTimestamp } from "../../../utils";
 import { FcCalendar } from "react-icons/fc";
 import "./BlogItem.css";
 

@@ -21,3 +21,10 @@ export function parseAndFormatTimestamp(timestampString: string | Date | any) {
   const formattedDateString = dateObject.toLocaleString("en-US", options);
   return formattedDateString;
 }
+
+// prevent auto form submission
+export function onKeyDown(keyEvent: any) {
+  if ((keyEvent.charCode || keyEvent.keyCode) === 13) {
+    keyEvent.preventDefault();
+  }
+}

@@ -9,6 +9,9 @@ import { SubHeading } from "../../Components/Heading";
 import ToastAlert from "../../Components/ToastAlert/ToastAlert";
 import { CiLock } from "react-icons/ci";
 import Signup from "../Signup";
+import { LOGIN_USER } from "./Components/graphql/loginMutation";
+import { useMutation } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
 
 interface ISLoginForm {
   email: string;
@@ -16,6 +19,7 @@ interface ISLoginForm {
 }
 
 const Login = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [selectedForm, setSelectedForm] = useState("login");
 
@@ -44,8 +48,41 @@ const Login = () => {
     }
   };
 
+  const [login] = useMutation(LOGIN_USER, {
+    onError(error) {
+      setToast({
+        message: error.message,
+        appearence: true,
+        type: "error",
+      });
+    },
+  });
+
   const LoginHandler = async (data: ISLoginForm) => {
-    console.log("payload", data);
+    try {
+      const response = await login({
+        variables: {
+          email: data.email,
+          password: data.password,
+        },
+      });
+      if (response.data) {
+        setToast({
+          message: "User logged in successfully",
+          appearence: true,
+          type: "success",
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      }
+    } catch (error) {
+      setToast({
+        message: "Something went wrong.",
+        appearence: true,
+        type: "error",
+      });
+    }
   };
 
   return (

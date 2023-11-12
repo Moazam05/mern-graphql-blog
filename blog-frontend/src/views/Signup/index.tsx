@@ -54,24 +54,24 @@ const Signup = (props: Props) => {
   });
 
   const signupHandler = async (data: ISSignupForm) => {
-    const response = await signup({
-      variables: {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-      },
-    });
-    if (response.data) {
-      setToast({
-        message: "User created successfully.",
-        appearence: true,
-        type: "success",
-      });
-      setTimeout(() => {
-        props.setSelectedForm("login");
-      }, 2000);
-    }
     try {
+      const response = await signup({
+        variables: {
+          name: data.name,
+          email: data.email,
+          password: data.password,
+        },
+      });
+      if (response.data) {
+        setToast({
+          message: "User created successfully",
+          appearence: true,
+          type: "success",
+        });
+        setTimeout(() => {
+          props.setSelectedForm("login");
+        }, 2000);
+      }
     } catch (error: any) {
       setToast({
         message: "Something went wrong.",

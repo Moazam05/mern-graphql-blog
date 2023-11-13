@@ -1,11 +1,16 @@
+// React Imports
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+// CSS Imports
 import "./index.css";
+// Custom Imports
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+// Apollo Client Imports
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+// Redux Imports
 import { store } from "./redux/store";
-import { Provider } from "react-redux";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

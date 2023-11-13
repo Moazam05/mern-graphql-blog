@@ -1,5 +1,8 @@
+// React Imports
 import * as React from "react";
+// MUI Imports
 import { Box, InputAdornment, TextField } from "@mui/material";
+// Custom Imports
 import Spinner from "../Spinner";
 
 interface PrimaryInputProps {

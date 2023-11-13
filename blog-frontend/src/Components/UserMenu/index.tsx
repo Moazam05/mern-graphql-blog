@@ -1,16 +1,23 @@
+// React Imports
 import { useState } from "react";
+// MUI Imports
 import { Box, IconButton, MenuItem, Menu } from "@mui/material";
+// React Icons
 import { FaUserNurse } from "react-icons/fa";
+// Redux Imports
 import { selectedUserName, setUser } from "../../redux/auth/authSlice";
 import { useDispatch } from "react-redux";
+// Custom Imports
 import ProfileModal from "./ProfileModal";
+// Hooks Imports
 import useTypedSelector from "../../hooks/useTypedSelector";
 
 const UserMenu = () => {
-  const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const dispatch = useDispatch();
-  const [profileOpen, setProfileOpen] = useState(false);
   const userName = useTypedSelector(selectedUserName);
+  // state
+  const [anchorEl, setAnchorEl] = useState<Element | null>(null);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   return (
     <Box>

@@ -1,4 +1,6 @@
+// React Imports
 import * as React from "react";
+// MUI Imports
 import { Box } from "@mui/material";
 import { SxProps } from "@mui/system";
 
@@ -39,24 +41,10 @@ interface HeadingProps {
 
 export const Heading = (props: HeadingProps) => {
   const styles: any = props.sx;
-  return (
-    <Box
-      color={(theme: any) => theme.palette.primary.main}
-      sx={{ ...root, ...styles }}
-    >
-      {props.children}
-    </Box>
-  );
+  return <Box sx={{ ...root, ...styles }}>{props.children}</Box>;
 };
 
 export const SubHeading = (props: HeadingProps) => {
   const styles: any = props.sx;
-  return (
-    <Box
-      color={(theme: any) => theme.palette.secondary.main}
-      sx={{ ...subRoot, ...styles }}
-    >
-      {props.children}
-    </Box>
-  );
+  return <Box sx={{ ...subRoot, ...styles }}>{props.children}</Box>;
 };

@@ -1,4 +1,7 @@
+// React imports
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+// MUI Imports
 import {
   Box,
   AppBar,
@@ -9,18 +12,22 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
+// React Icons
 import { ImBlogger } from "react-icons/im";
 import { BiLogInCircle } from "react-icons/bi";
-import { useNavigate } from "react-router-dom";
+// Redux Imports
 import { selectedUserId } from "../../redux/auth/authSlice";
+// Hooks Imports
 import useTypedSelector from "../../hooks/useTypedSelector";
+// Custom Imports
 import UserMenu from "../UserMenu";
 
 const Header = () => {
+  // Navigation
   const navigate = useNavigate();
-  const [value, setValue] = useState(0);
-
   const clientId = useTypedSelector(selectedUserId);
+  // States
+  const [value, setValue] = useState(0);
 
   return (
     <>

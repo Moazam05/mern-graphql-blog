@@ -1,11 +1,13 @@
+// React Imports
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// Custom Imports
+import Header from "./Components/Header";
+import Footer from "./Components/Footer";
 import Home from "./views/Home";
 import Blog from "./views/Blog";
-import Footer from "./Components/Footer";
-import Header from "./Components/Header";
-import NotFound from "./views/NotFound";
 import Login from "./views/Login";
 import AddBlog from "./views/AddBlog";
+import NotFound from "./views/NotFound";
 
 function App() {
   return (

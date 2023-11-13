@@ -1,4 +1,6 @@
+// Redux Toolkit Imports
 import { createSlice } from "@reduxjs/toolkit";
+// Custom Imports
 import { RootState } from "../store";
 
 const getInitialUser = () => {

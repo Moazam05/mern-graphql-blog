@@ -1,3 +1,4 @@
+// MUI Imports
 import { Box, Button, Typography } from "@mui/material";
 
 const Footer = () => {

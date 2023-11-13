@@ -43,7 +43,7 @@ const Signup = (props: Props) => {
     setToast({ ...toast, appearence: false });
   };
 
-  const [signup] = useMutation(SIGNUP_USER, {
+  const [signup, { loading }] = useMutation(SIGNUP_USER, {
     onError(error) {
       setToast({
         message: error.message,
@@ -158,14 +158,14 @@ const Signup = (props: Props) => {
                   type="submit"
                   variant="contained"
                   fullWidth
-                  // disabled={loadingLoginUser}
+                  disabled={loading}
                   sx={{
                     padding: "5px 30px",
                     textTransform: "capitalize",
                     margin: "20px 0",
                   }}
                 >
-                  Sign Up
+                  {loading ? "Sign Up..." : "Sign Up"}
                 </Button>
               </Box>
             </Form>

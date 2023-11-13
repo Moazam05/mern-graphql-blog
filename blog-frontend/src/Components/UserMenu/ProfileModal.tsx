@@ -62,7 +62,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
             </Typography>
             <Box sx={{ cursor: "pointer" }}>
               <IconButton onClick={handleClose}>
-                <AiOutlineClose style={{ color: "#fff" }} />
+                <AiOutlineClose style={{ color: "#fff", fontSize: "20px" }} />
               </IconButton>
             </Box>
           </Box>

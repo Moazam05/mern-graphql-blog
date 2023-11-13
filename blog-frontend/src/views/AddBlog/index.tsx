@@ -56,6 +56,7 @@ const AddBlog = () => {
           title: data.title,
           content: data.content,
           userId: userID,
+          date: new Date(),
         },
       });
       if (response.data) {

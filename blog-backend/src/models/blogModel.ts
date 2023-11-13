@@ -12,7 +12,7 @@ const blogSchema = new mongoose.Schema({
   },
   date: {
     type: Date,
-    default: Date.now(),
+    required: [true, "A Blog must have a date"],
   },
   updatedAt: {
     type: Date,

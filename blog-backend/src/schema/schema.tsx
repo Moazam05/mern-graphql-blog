@@ -158,13 +158,14 @@ const mutation = new GraphQLObjectType({
       args: {
         title: { type: new GraphQLNonNull(GraphQLString) },
         content: { type: new GraphQLNonNull(GraphQLString) },
+        date: { type: new GraphQLNonNull(GraphQLString) },
         userId: { type: new GraphQLNonNull(GraphQLID) }, // Add a new argument for userId
       },
-      async resolve(parent, { title, content, userId }) {
+      async resolve(parent, { title, content, userId, date }) {
         const session = await startSession();
         try {
           session.startTransaction({ session });
-          const blog = new Blog({ title, content, user: userId });
+          const blog = new Blog({ title, content, date, user: userId });
 
           const existingUser = await User.findById(userId);
           if (!existingUser) return new AppError("User not found", 404);

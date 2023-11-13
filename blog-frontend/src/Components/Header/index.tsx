@@ -12,14 +12,12 @@ import {
 import { ImBlogger } from "react-icons/im";
 import { BiLogInCircle } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
-import { selectedUserId, setPathName } from "../../redux/auth/authSlice";
+import { selectedUserId } from "../../redux/auth/authSlice";
 import useTypedSelector from "../../hooks/useTypedSelector";
 import UserMenu from "../UserMenu";
-import { useDispatch } from "react-redux";
 
 const Header = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [value, setValue] = useState(0);
 
   const clientId = useTypedSelector(selectedUserId);
@@ -54,8 +52,6 @@ const Header = () => {
             }}
             onClick={() => {
               navigate("/addBlog");
-              dispatch(setPathName("/blogs"));
-              localStorage.setItem("path", JSON.stringify("/blogs"));
             }}
           >
             <Typography sx={{ fontFamily: "Work Sans", fontSize: "18px" }}>
@@ -84,16 +80,12 @@ const Header = () => {
                 label="Home"
                 onClick={() => {
                   navigate("/");
-                  dispatch(setPathName("/"));
-                  localStorage.setItem("path", JSON.stringify("/"));
                 }}
               />
               <Tab
                 label="Blogs"
                 onClick={() => {
                   navigate("/blogs");
-                  dispatch(setPathName("/blogs"));
-                  localStorage.setItem("path", JSON.stringify("/blogs"));
                 }}
               />
             </Tabs>
@@ -114,8 +106,6 @@ const Header = () => {
                 endIcon={<BiLogInCircle />}
                 onClick={() => {
                   navigate("/login");
-                  dispatch(setPathName("/login"));
-                  localStorage.setItem("path", JSON.stringify("/login"));
                 }}
               >
                 Log In

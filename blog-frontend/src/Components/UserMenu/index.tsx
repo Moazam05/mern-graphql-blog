@@ -1,20 +1,37 @@
 import { useState } from "react";
 import { Box, IconButton, MenuItem, Menu } from "@mui/material";
 import { FaUserNurse } from "react-icons/fa";
-import { setUser } from "../../redux/auth/authSlice";
+import { selectedUserName, setUser } from "../../redux/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import ProfileModal from "./ProfileModal";
+import useTypedSelector from "../../hooks/useTypedSelector";
 
 const UserMenu = () => {
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [profileOpen, setProfileOpen] = useState(false);
+  const userName = useTypedSelector(selectedUserName);
 
   return (
     <Box>
-      <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} color="inherit">
-        <FaUserNurse />
-      </IconButton>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          // gap: 3,
+        }}
+      >
+        {userName}
+        <IconButton
+          onClick={(e) => setAnchorEl(e.currentTarget)}
+          color="inherit"
+        >
+          <FaUserNurse />
+        </IconButton>
+      </Box>
       <Menu
         onClose={() => setAnchorEl(null)}
         anchorEl={anchorEl}
@@ -22,7 +39,7 @@ const UserMenu = () => {
       >
         <MenuItem
           onClick={() => {
-            navigate("/profile");
+            setProfileOpen(true);
             setAnchorEl(null);
           }}
         >
@@ -38,6 +55,7 @@ const UserMenu = () => {
           Logout
         </MenuItem>
       </Menu>
+      <ProfileModal profileOpen={profileOpen} setProfileOpen={setProfileOpen} />
     </Box>
   );
 };

@@ -11,6 +11,8 @@ import { ADD_BLOG } from "./Components/graphql/addBlogMutation";
 import { useNavigate } from "react-router-dom";
 import useTypedSelector from "../../hooks/useTypedSelector";
 import { selectedUserId } from "../../redux/auth/authSlice";
+import { AiOutlineBulb } from "react-icons/ai";
+import { GET_BLOGS } from "../Blog/graphql/blogQuery";
 
 interface IsAddBlogForm {
   title: string;
@@ -44,6 +46,7 @@ const AddBlog = () => {
         type: "error",
       });
     },
+    refetchQueries: [{ query: GET_BLOGS }],
   });
 
   const addBlogHandler = async (data: IsAddBlogForm) => {
@@ -148,19 +151,46 @@ const AddBlog = () => {
                       marginTop: "20px",
                     }}
                   >
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      fullWidth
-                      disabled={loading}
-                      sx={{
-                        padding: "5px 30px",
-                        textTransform: "capitalize",
-                        margin: "20px 0",
-                      }}
-                    >
-                      {loading ? "Published Blog..." : "Published Blog"}
-                    </Button>
+                    {userID === undefined ? (
+                      <Box
+                        sx={{
+                          background: "#dbe8e6",
+                          padding: "12px 18px",
+                          borderRadius: "6px",
+                          border: "1px solid #2a9d8f",
+                          fontSize: "13px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          marginBottom: "10px",
+                          width: "100%",
+                        }}
+                      >
+                        <span style={{ marginTop: "5px", marginRight: "3px" }}>
+                          <AiOutlineBulb
+                            style={{
+                              color: "#2a9d8f",
+                              fontSize: "15px",
+                            }}
+                          />
+                        </span>
+                        Please Login To Published Your Blog...!
+                      </Box>
+                    ) : (
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        fullWidth
+                        disabled={loading}
+                        sx={{
+                          padding: "5px 30px",
+                          textTransform: "capitalize",
+                          margin: "20px 0",
+                        }}
+                      >
+                        {loading ? "Published Blog..." : "Published Blog"}
+                      </Button>
+                    )}
                   </Box>
                 </Form>
               );

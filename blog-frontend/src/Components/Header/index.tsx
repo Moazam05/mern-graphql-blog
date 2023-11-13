@@ -5,6 +5,7 @@ import { BiLogInCircle } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { selectedUserId } from "../../redux/auth/authSlice";
 import useTypedSelector from "../../hooks/useTypedSelector";
+import UserMenu from "../UserMenu";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -52,24 +53,28 @@ const Header = () => {
                 }}
               />
             </Tabs>
-            <Button
-              sx={{
-                marginLeft: 2,
-                bgcolor: "#d27e20",
-                color: "#fff",
-                borderRadius: 20,
-                width: 95,
-                "&:hover": {
-                  bgcolor: "#ff9400",
-                },
-              }}
-              endIcon={<BiLogInCircle />}
-              onClick={() => {
-                navigate("/login");
-              }}
-            >
-              Log In
-            </Button>
+            {clientId ? (
+              <UserMenu />
+            ) : (
+              <Button
+                sx={{
+                  marginLeft: 2,
+                  bgcolor: "#d27e20",
+                  color: "#fff",
+                  borderRadius: 20,
+                  width: 95,
+                  "&:hover": {
+                    bgcolor: "#ff9400",
+                  },
+                }}
+                endIcon={<BiLogInCircle />}
+                onClick={() => {
+                  navigate("/login");
+                }}
+              >
+                Log In
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </AppBar>

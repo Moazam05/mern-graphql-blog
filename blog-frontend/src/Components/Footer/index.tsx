@@ -1,6 +1,10 @@
 import { Box, Button, Typography } from "@mui/material";
+import useTypedSelector from "../../hooks/useTypedSelector";
+import { userPath } from "../../redux/auth/authSlice";
 
 const Footer = () => {
+  const userLocation = useTypedSelector(userPath);
+
   return (
     <>
       <Box
@@ -11,6 +15,9 @@ const Footer = () => {
           height: "20vh",
           gap: 20,
           bgcolor: "#404040",
+          position: userLocation === "/blogs" ? "fixed" : "unset",
+          width: userLocation === "/blogs" ? "100%" : "unset",
+          bottom: userLocation === "/blogs" ? 0 : "unset",
         }}
       >
         <Button variant="contained" sx={{ borderRadius: 10, width: 200 }}>

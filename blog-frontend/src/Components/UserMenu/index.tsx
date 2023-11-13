@@ -3,14 +3,12 @@ import { Box, IconButton, MenuItem, Menu } from "@mui/material";
 import { FaUserNurse } from "react-icons/fa";
 import { selectedUserName, setUser } from "../../redux/auth/authSlice";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import ProfileModal from "./ProfileModal";
 import useTypedSelector from "../../hooks/useTypedSelector";
 
 const UserMenu = () => {
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [profileOpen, setProfileOpen] = useState(false);
   const userName = useTypedSelector(selectedUserName);
 
@@ -21,7 +19,6 @@ const UserMenu = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          // gap: 3,
         }}
       >
         {userName}

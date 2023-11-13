@@ -52,7 +52,7 @@ const Login = () => {
     }
   };
 
-  const [login] = useMutation(LOGIN_USER, {
+  const [login, { loading }] = useMutation(LOGIN_USER, {
     onError(error) {
       setToast({
         message: error.message,
@@ -78,7 +78,7 @@ const Login = () => {
         });
         setTimeout(() => {
           navigate("/");
-        }, 2000);
+        }, 1500);
         dispatch(setUser(response.data));
         localStorage.setItem("user", JSON.stringify(response.data));
       }
@@ -246,14 +246,14 @@ const Login = () => {
                           type="submit"
                           variant="contained"
                           fullWidth
-                          // disabled={loadingLoginUser}
+                          disabled={loading}
                           sx={{
                             padding: "5px 30px",
                             textTransform: "capitalize",
                             margin: "20px 0",
                           }}
                         >
-                          Log In
+                          {loading ? "Login..." : "Login"}
                         </Button>
                       </Box>
                     </Form>

@@ -1,6 +1,5 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { IconButton } from "@mui/material";
@@ -30,6 +29,10 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
   const handleClose = () => {
     setProfileOpen(false);
   };
+
+  const userData: string = localStorage.getItem("user") as string;
+  const user = JSON.parse(userData);
+
   return (
     <div>
       <Modal
@@ -64,8 +67,57 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
             </Box>
           </Box>
           <Box sx={{ padding: "18px 10px" }}>
-            <Box sx={{ fontSize: "16px" }}>
-              Are you sure you want to delete the leave request of{" "}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "5px",
+              }}
+            >
+              <Box sx={{ minWidth: "200px" }}>Name</Box>
+              <Box sx={{ fontSize: "16px", fontWeight: 600 }}>
+                {user?.login?.name}
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "5px",
+              }}
+            >
+              <Box sx={{ minWidth: "200px" }}>Email</Box>
+              <Box sx={{ fontSize: "16px", fontWeight: 600 }}>
+                {user?.login?.email}
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "5px",
+              }}
+            >
+              <Box sx={{ minWidth: "200px" }}>Blogs Created</Box>
+              <Box sx={{ fontSize: "16px", fontWeight: 600 }}>
+                {user?.login?.blogs?.length === 0
+                  ? "No Blogs Created Yet"
+                  : user?.login?.blogs?.length}
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "5px",
+              }}
+            >
+              <Box sx={{ minWidth: "200px" }}>Comments On Blogs</Box>
+              <Box sx={{ fontSize: "16px", fontWeight: 600 }}>
+                {user?.login?.comments?.length === 0
+                  ? "No Comments Posted Yet"
+                  : user?.login?.comments?.length}
+              </Box>
             </Box>
           </Box>
         </Box>

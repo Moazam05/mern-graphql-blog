@@ -5,6 +5,13 @@ const LOGIN_USER = gql`
     login(email: $email, password: $password) {
       id
       name
+      email
+      blogs {
+        id
+      }
+      comments {
+        id
+      }
     }
   }
 `;

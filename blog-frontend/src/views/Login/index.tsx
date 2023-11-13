@@ -12,6 +12,8 @@ import Signup from "../Signup";
 import { LOGIN_USER } from "./Components/graphql/loginMutation";
 import { useMutation } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/auth/authSlice";
 
 interface ISLoginForm {
   email: string;
@@ -19,7 +21,9 @@ interface ISLoginForm {
 }
 
 const Login = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
   const [selectedForm, setSelectedForm] = useState("login");
 
@@ -75,6 +79,8 @@ const Login = () => {
         setTimeout(() => {
           navigate("/");
         }, 2000);
+        dispatch(setUser(response.data));
+        localStorage.setItem("user", JSON.stringify(response.data));
       }
     } catch (error) {
       setToast({

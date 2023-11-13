@@ -3,10 +3,15 @@ import { Box, AppBar, Toolbar, Tabs, Tab, Button } from "@mui/material";
 import { ImBlogger } from "react-icons/im";
 import { BiLogInCircle } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
+import { selectedUserId } from "../../redux/auth/authSlice";
+import useTypedSelector from "../../hooks/useTypedSelector";
 
 const Header = () => {
   const navigate = useNavigate();
   const [value, setValue] = useState(0);
+
+  const clientId = useTypedSelector(selectedUserId);
+
   return (
     <>
       <AppBar position="sticky" sx={{ bgcolor: "#404040 " }}>

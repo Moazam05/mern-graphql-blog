@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { Box, AppBar, Toolbar, Tabs, Tab, Button } from "@mui/material";
+import {
+  Box,
+  AppBar,
+  Toolbar,
+  Tabs,
+  Tab,
+  Button,
+  Typography,
+  IconButton,
+} from "@mui/material";
 import { ImBlogger } from "react-icons/im";
 import { BiLogInCircle } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +36,35 @@ const Header = () => {
               background: "#6c5252",
             }}
           />
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 1,
+              position: "absolute",
+              right: "40%",
+              width: "300px",
+              padding: "5px",
+              "&:hover": {
+                bgcolor: "rgba(0,0,0,0.1)",
+                borderRadius: 10,
+                cursor: "pointer",
+              },
+            }}
+            onClick={() => {
+              navigate("/addBlog");
+              dispatch(setPathName("/blogs"));
+              localStorage.setItem("path", JSON.stringify("/blogs"));
+            }}
+          >
+            <Typography sx={{ fontFamily: "Work Sans", fontSize: "18px" }}>
+              Post New Blog
+              <IconButton color="inherit">
+                <ImBlogger style={{ fontSize: "20px" }} />
+              </IconButton>
+            </Typography>
+          </Box>
           <Box
             sx={{
               width: "100%",

@@ -1,6 +1,6 @@
-import { Box, Button, Divider } from "@mui/material";
+import { Box, Button, Divider, Tooltip } from "@mui/material";
 import { Heading } from "../../../Components/Heading";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { GET_BLOG } from "./graphql/addBlogQuery";
 import Spinner from "../../../Components/Spinner";
 import { useParams } from "react-router-dom";
@@ -17,6 +17,12 @@ import * as Yup from "yup";
 import { IoPersonOutline } from "react-icons/io5";
 import { MdOutlineEmail } from "react-icons/md";
 import { MdOutlineEditCalendar } from "react-icons/md";
+import { ADD_COMMENT_TO_BLOG } from "./graphql/addBlogMutation";
+import ToastAlert from "../../../Components/ToastAlert/ToastAlert";
+import { GET_BLOGS } from "../../Blog/graphql/blogQuery";
+import { selectedUserId } from "../../../redux/auth/authSlice";
+import useTypedSelector from "../../../hooks/useTypedSelector";
+import { AiOutlineBulb } from "react-icons/ai";
 
 interface ISAddCommentForm {
   text: string;
@@ -31,17 +37,70 @@ const commentSchema = Yup.object().shape({
 
 const UpdateBlog = () => {
   const { id } = useParams();
+  const clientId = useTypedSelector(selectedUserId);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [formValues, setFormValues] = useState<ISAddCommentForm>({
     text: "",
   });
+  const [toast, setToast] = useState({
+    message: "",
+    appearence: false,
+    type: "",
+  });
+
+  const handleCloseToast = () => {
+    setToast({ ...toast, appearence: false });
+  };
 
   const { data, loading, error } = useQuery(GET_BLOG, {
     variables: {
       id,
     },
   });
+
+  const [addCommentToBlog, { loading: commentLoading }] = useMutation(
+    ADD_COMMENT_TO_BLOG,
+    {
+      onError(error) {
+        setToast({
+          message: error.message,
+          appearence: true,
+          type: "error",
+        });
+      },
+      refetchQueries: [{ query: GET_BLOGS }],
+    }
+  );
+
+  const AddCommentHandler = async (
+    formData: ISAddCommentForm,
+    resetForm: any
+  ) => {
+    try {
+      const response = await addCommentToBlog({
+        variables: {
+          blogId: id,
+          text: formData.text,
+          userId: clientId,
+        },
+      });
+      if (response.data) {
+        setToast({
+          message: "Comment added successfully",
+          appearence: true,
+          type: "success",
+        });
+        resetForm();
+      }
+    } catch (error) {
+      setToast({
+        message: "Something went wrong.",
+        appearence: true,
+        type: "error",
+      });
+    }
+  };
 
   if (loading)
     return (
@@ -50,12 +109,6 @@ const UpdateBlog = () => {
       </Box>
     );
   if (error) return <div>Something Went Wrong...!</div>;
-
-  console.log("data", data);
-
-  const AddCommentHandler = async (data: ISAddCommentForm) => {
-    console.log("payload", data);
-  };
 
   return (
     <>
@@ -182,8 +235,8 @@ const UpdateBlog = () => {
           >
             <Formik
               initialValues={formValues}
-              onSubmit={(values: ISAddCommentForm) => {
-                AddCommentHandler(values);
+              onSubmit={(values: ISAddCommentForm, { resetForm }) => {
+                AddCommentHandler(values, resetForm);
               }}
               validationSchema={commentSchema}
             >
@@ -220,7 +273,7 @@ const UpdateBlog = () => {
                         <Button
                           type="submit"
                           variant="contained"
-                          // disabled={loading}
+                          disabled={commentLoading || clientId === undefined}
                           sx={{
                             padding: "5px 30px",
                             textTransform: "capitalize",
@@ -228,7 +281,7 @@ const UpdateBlog = () => {
                             width: "200px",
                           }}
                         >
-                          Add Comment
+                          {commentLoading ? "Adding Comment..." : "Add Comment"}
                         </Button>
                       </Box>
                     </Box>
@@ -237,6 +290,38 @@ const UpdateBlog = () => {
               }}
             </Formik>
           </Box>
+          {clientId === undefined && (
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
+              <Box
+                sx={{
+                  background: "#dbe8e6",
+                  padding: "12px 18px",
+                  borderRadius: "6px",
+                  border: "1px solid #2a9d8f",
+                  fontSize: "13px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <span style={{ marginTop: "5px", marginRight: "3px" }}>
+                  <AiOutlineBulb
+                    style={{
+                      color: "#2a9d8f",
+                      fontSize: "15px",
+                    }}
+                  />
+                </span>
+                Please Login To Post Your Comment...!
+              </Box>
+            </Box>
+          )}
           {data?.blog?.comments?.length > 0 &&
             data?.blog?.comments?.map((comment: any) => (
               <Box>
@@ -248,9 +333,17 @@ const UpdateBlog = () => {
                     gap: 1,
                   }}
                 >
-                  <Box sx={{ fontWeight: 700, minWidth: "50px" }}>
-                    {getInitials(data?.blog?.user?.name)}
-                  </Box>
+                  <Tooltip title={`${comment?.user?.name}`} placement="top">
+                    <Box
+                      sx={{
+                        fontWeight: 700,
+                        minWidth: "50px",
+                      }}
+                    >
+                      {getInitials(comment?.user?.name)}
+                    </Box>
+                  </Tooltip>
+
                   <Box>{comment?.text}</Box>
                 </Box>
                 <Box
@@ -263,6 +356,12 @@ const UpdateBlog = () => {
             ))}
         </Box>
       </Box>
+      <ToastAlert
+        appearence={toast.appearence}
+        type={toast.type}
+        message={toast.message}
+        handleClose={handleCloseToast}
+      />
     </>
   );
 };

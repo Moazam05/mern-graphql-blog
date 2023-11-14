@@ -15,4 +15,13 @@ const ADD_BLOG = gql`
   }
 `;
 
-export { ADD_BLOG };
+const ADD_COMMENT_TO_BLOG = gql`
+  mutation addCommentToBlog($text: String!, $userId: ID!, $blogId: ID!) {
+    addCommentToBlog(text: $text, userId: $userId, blogId: $blogId) {
+      id
+      text
+    }
+  }
+`;
+
+export { ADD_BLOG, ADD_COMMENT_TO_BLOG };

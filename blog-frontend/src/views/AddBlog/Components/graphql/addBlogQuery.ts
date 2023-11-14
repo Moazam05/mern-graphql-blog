@@ -1,12 +1,14 @@
 import { gql } from "@apollo/client";
 
 const GET_BLOG = gql`
-  query getBlog($id: ID!) {
-    getBlog(id: $id) {
+  query blog($id: ID!) {
+    blog(id: $id) {
+      id
       title
       content
       date
       user {
+        id
         name
         email
       }

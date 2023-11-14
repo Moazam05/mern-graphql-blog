@@ -8,6 +8,7 @@ import Blog from "./views/Blog";
 import Login from "./views/Login";
 import AddBlog from "./views/AddBlog";
 import NotFound from "./views/NotFound";
+import UpdateBlog from "./views/AddBlog/Components/UpdateBlog";
 
 function App() {
   return (
@@ -17,8 +18,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/blogs" element={<Blog />} />
-          <Route path="/login" element={<Login />} />
           <Route path="/addBlog" element={<AddBlog />} />
+          <Route path="/blogs/:id" element={<UpdateBlog />} />
+          <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />

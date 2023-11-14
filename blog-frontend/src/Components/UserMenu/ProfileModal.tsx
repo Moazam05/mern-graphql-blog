@@ -71,7 +71,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
               sx={{
                 display: "flex",
                 alignItems: "center",
-                marginBottom: "5px",
+                marginBottom: "7px",
               }}
             >
               <Box sx={{ minWidth: "200px" }}>Name</Box>
@@ -83,7 +83,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
               sx={{
                 display: "flex",
                 alignItems: "center",
-                marginBottom: "5px",
+                marginBottom: "7px",
               }}
             >
               <Box sx={{ minWidth: "200px" }}>Email</Box>
@@ -95,21 +95,21 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
               sx={{
                 display: "flex",
                 alignItems: "center",
-                marginBottom: "5px",
+                marginBottom: "7px",
               }}
             >
               <Box sx={{ minWidth: "200px" }}>Blogs Created</Box>
               <Box sx={{ fontSize: "16px", fontWeight: 600 }}>
                 {user?.login?.blogs?.length === 0
                   ? "No Blogs Created Yet"
-                  : user?.login?.blogs?.length}
+                  : `You wrote ${user?.login?.blogs?.length} Blogs 🎉`}
               </Box>
             </Box>
             <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
-                marginBottom: "5px",
+                marginBottom: "7px",
               }}
             >
               <Box sx={{ minWidth: "200px" }}>Comments On Blogs</Box>

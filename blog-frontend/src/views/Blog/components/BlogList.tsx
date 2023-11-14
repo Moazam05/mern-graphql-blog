@@ -4,12 +4,28 @@ import { FcCalendar } from "react-icons/fc";
 import { Grid } from "@mui/material";
 import { parseAndFormatTimestamp } from "../../../utils";
 import { Heading } from "../../../Components/Heading";
+import { RxUpdate } from "react-icons/rx";
+import { MdDeleteOutline } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   blogs: BlogType[];
 };
 
+const iconStyle = {
+  background: "#f0f0f0",
+  width: "50%",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: 1,
+  padding: "8px 12px",
+  borderRadius: "6px",
+  cursor: "pointer",
+};
+
 const BlogList = (props: Props) => {
+  const navigate = useNavigate();
   return (
     <>
       <Grid container spacing={3}>
@@ -57,6 +73,22 @@ const BlogList = (props: Props) => {
               </Box>
               <Box sx={{ margin: "15px 0" }}>
                 <Box sx={{ color: "#a0a0a0" }}>{post.content}</Box>
+              </Box>
+
+              <Box sx={{ margin: "30px 0 10px 0" }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+                  <Box
+                    sx={iconStyle}
+                    onClick={() => {
+                      navigate(`/blogs/${post.id}`);
+                    }}
+                  >
+                    <RxUpdate /> <Box>Update</Box>
+                  </Box>
+                  <Box sx={iconStyle}>
+                    <MdDeleteOutline /> <Box>Delete</Box>
+                  </Box>
+                </Box>
               </Box>
             </Box>
           </Grid>

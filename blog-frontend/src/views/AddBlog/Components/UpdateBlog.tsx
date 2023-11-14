@@ -1,10 +1,14 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Divider } from "@mui/material";
 import { Heading } from "../../../Components/Heading";
 import { useQuery } from "@apollo/client";
 import { GET_BLOG } from "./graphql/addBlogQuery";
 import Spinner from "../../../Components/Spinner";
 import { useParams } from "react-router-dom";
-import { onKeyDown, parseAndFormatTimestamp } from "../../../utils";
+import {
+  getInitials,
+  onKeyDown,
+  parseAndFormatTimestamp,
+} from "../../../utils";
 import { FaRegComments } from "react-icons/fa6";
 import PrimaryInput from "../../../Components/PrimaryInput/PrimaryInput";
 import { Form, Formik, FormikProps } from "formik";
@@ -233,6 +237,30 @@ const UpdateBlog = () => {
               }}
             </Formik>
           </Box>
+          {data?.blog?.comments?.length > 0 &&
+            data?.blog?.comments?.map((comment: any) => (
+              <Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    margin: "20px 0 0 0",
+                    gap: 1,
+                  }}
+                >
+                  <Box sx={{ fontWeight: 700, minWidth: "50px" }}>
+                    {getInitials(data?.blog?.user?.name)}
+                  </Box>
+                  <Box>{comment?.text}</Box>
+                </Box>
+                <Box
+                  sx={{
+                    marginTop: "15px",
+                  }}
+                ></Box>
+                <Divider />
+              </Box>
+            ))}
         </Box>
       </Box>
     </>

@@ -28,3 +28,14 @@ export function onKeyDown(keyEvent: any) {
     keyEvent.preventDefault();
   }
 }
+
+export function getInitials(name: string) {
+  // Split the name into parts
+  const nameParts = name.split(" ");
+
+  // Extract the first character of each part
+  const initials = nameParts.map((part) => part.charAt(0).toUpperCase());
+
+  // Join the initials together
+  return initials.join("");
+}

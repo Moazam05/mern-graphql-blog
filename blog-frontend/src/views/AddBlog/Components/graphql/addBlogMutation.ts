@@ -24,4 +24,12 @@ const ADD_COMMENT_TO_BLOG = gql`
   }
 `;
 
-export { ADD_BLOG, ADD_COMMENT_TO_BLOG };
+const DELETE_BLOG = gql`
+  mutation deleteBlog($id: ID!) {
+    deleteBlog(id: $id) {
+      id
+    }
+  }
+`;
+
+export { ADD_BLOG, ADD_COMMENT_TO_BLOG, DELETE_BLOG };

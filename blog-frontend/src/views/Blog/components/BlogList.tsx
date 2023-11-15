@@ -1,31 +1,73 @@
 import { BlogType } from "../../../Components/types";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { FcCalendar } from "react-icons/fc";
 import { Grid } from "@mui/material";
 import { parseAndFormatTimestamp } from "../../../utils";
 import { Heading } from "../../../Components/Heading";
-import { RxUpdate } from "react-icons/rx";
 import { MdDeleteOutline } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { IoPersonOutline } from "react-icons/io5";
+import { MdOutlineFeaturedPlayList } from "react-icons/md";
+import useTypedSelector from "../../../hooks/useTypedSelector";
+import { selectedUserId } from "../../../redux/auth/authSlice";
+import { useMutation } from "@apollo/client";
+import { DELETE_BLOG } from "../../AddBlog/Components/graphql/addBlogMutation";
+import { useState } from "react";
+import { GET_BLOGS } from "../graphql/blogQuery";
+import ToastAlert from "../../../Components/ToastAlert/ToastAlert";
 
 type Props = {
   blogs: BlogType[];
 };
 
-const iconStyle = {
-  background: "#f0f0f0",
-  width: "50%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  gap: 1,
-  padding: "8px 12px",
-  borderRadius: "6px",
-  cursor: "pointer",
-};
-
 const BlogList = (props: Props) => {
   const navigate = useNavigate();
+  const userId = useTypedSelector(selectedUserId);
+  const [toast, setToast] = useState({
+    message: "",
+    appearence: false,
+    type: "",
+  });
+
+  const handleCloseToast = () => {
+    setToast({ ...toast, appearence: false });
+  };
+
+  // mutation of delete blog
+  const [deleteBlog, { loading }] = useMutation(DELETE_BLOG, {
+    onError(error) {
+      setToast({
+        message: error.message,
+        appearence: true,
+        type: "error",
+      });
+    },
+    refetchQueries: [{ query: GET_BLOGS }],
+  });
+
+  const deleteBlogHandler = async (id: string) => {
+    try {
+      const response = await deleteBlog({
+        variables: {
+          id,
+        },
+      });
+      if (response.data) {
+        setToast({
+          message: "Blog deleted successfully",
+          appearence: true,
+          type: "success",
+        });
+      }
+    } catch (error) {
+      setToast({
+        message: "Something went wrong.",
+        appearence: true,
+        type: "error",
+      });
+    }
+  };
+
   return (
     <>
       <Grid container spacing={3}>
@@ -75,25 +117,70 @@ const BlogList = (props: Props) => {
                 <Box sx={{ color: "#a0a0a0" }}>{post.content}</Box>
               </Box>
 
-              <Box sx={{ margin: "30px 0 10px 0" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 3,
+                  margin: "25px 0 0 0",
+                  width: "fit-content",
+                  padding: "4px 8px",
+                  borderRadius: "6px",
+                  fontWeight: 500,
+                }}
+              >
+                <Box
+                  sx={{
+                    minWidth: "50px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                  }}
+                >
+                  <IoPersonOutline /> <Box>Author</Box>
+                </Box>
+                <Box>{post.user.name}</Box>
+              </Box>
+
+              <Box sx={{ margin: "20px 0 10px 0" }}>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-                  <Box
-                    sx={iconStyle}
+                  <Button
                     onClick={() => {
                       navigate(`/blogs/${post.id}`);
                     }}
+                    fullWidth
+                    variant="outlined"
+                    startIcon={<MdOutlineFeaturedPlayList />}
+                    sx={{ textTransform: "capitalize" }}
                   >
-                    <RxUpdate /> <Box>Update</Box>
-                  </Box>
-                  <Box sx={iconStyle}>
-                    <MdDeleteOutline /> <Box>Delete</Box>
-                  </Box>
+                    Learn More
+                  </Button>
+
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    color="error"
+                    startIcon={<MdDeleteOutline />}
+                    sx={{ textTransform: "capitalize" }}
+                    disabled={userId !== post.user.id || loading}
+                    onClick={() => {
+                      deleteBlogHandler(post.id);
+                    }}
+                  >
+                    Delete
+                  </Button>
                 </Box>
               </Box>
             </Box>
           </Grid>
         ))}
       </Grid>
+      <ToastAlert
+        appearence={toast.appearence}
+        type={toast.type}
+        message={toast.message}
+        handleClose={handleCloseToast}
+      />
     </>
   );
 };

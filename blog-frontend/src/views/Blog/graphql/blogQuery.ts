@@ -8,6 +8,7 @@ const GET_BLOGS = gql`
       content
       date
       user {
+        id
         name
       }
     }

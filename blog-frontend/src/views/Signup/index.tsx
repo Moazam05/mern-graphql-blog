@@ -6,7 +6,7 @@ import { onKeyDown } from "../../utils";
 import PrimaryInput from "../../Components/PrimaryInput/PrimaryInput";
 import ToastAlert from "../../Components/ToastAlert/ToastAlert";
 import { SubHeading } from "../../Components/Heading";
-import { signupSchema } from "./Components/validationSchema";
+import { signupSchema } from "./components/validationSchema";
 import { useMutation } from "@apollo/client";
 import { SIGNUP_USER } from "./graphql/signupMutation";
 

@@ -8,7 +8,7 @@ import Blog from "./views/Blog";
 import Login from "./views/Login";
 import AddBlog from "./views/AddBlog";
 import NotFound from "./views/NotFound";
-import UpdateBlog from "./views/AddBlog/Components/UpdateBlog";
+import UpdateBlog from "./views/AddBlog/components/UpdateBlog";
 
 function App() {
   return (

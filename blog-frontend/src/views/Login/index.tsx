@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Form, Formik, FormikProps } from "formik";
-import { loginSchema } from "./Components/validationSchema";
+import { loginSchema } from "./components/validationSchema";
 import { Button, ToggleButton, ToggleButtonGroup, Box } from "@mui/material";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { onKeyDown } from "../../utils";
@@ -9,7 +9,7 @@ import { SubHeading } from "../../Components/Heading";
 import ToastAlert from "../../Components/ToastAlert/ToastAlert";
 import { CiLock } from "react-icons/ci";
 import Signup from "../Signup";
-import { LOGIN_USER } from "./Components/graphql/loginMutation";
+import { LOGIN_USER } from "./graphql/loginMutation";
 import { useMutation } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";

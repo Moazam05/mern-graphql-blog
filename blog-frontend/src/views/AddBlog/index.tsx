@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Form, Formik, FormikProps } from "formik";
-import { addBlogSchema } from "./Components/validationSchema";
+import { addBlogSchema } from "./components/validationSchema";
 import { Button, Box } from "@mui/material";
 import ToastAlert from "../../Components/ToastAlert/ToastAlert";
 import { onKeyDown } from "../../utils";
 import { SubHeading } from "../../Components/Heading";
 import PrimaryInput from "../../Components/PrimaryInput/PrimaryInput";
 import { useMutation } from "@apollo/client";
-import { ADD_BLOG } from "./Components/graphql/addBlogMutation";
+import { ADD_BLOG } from "./graphql/addBlogMutation";
 import { useNavigate } from "react-router-dom";
 import useTypedSelector from "../../hooks/useTypedSelector";
 import { selectedUserId } from "../../redux/auth/authSlice";

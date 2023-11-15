@@ -11,7 +11,7 @@ import { MdOutlineFeaturedPlayList } from "react-icons/md";
 import useTypedSelector from "../../../hooks/useTypedSelector";
 import { selectedUserId } from "../../../redux/auth/authSlice";
 import { useMutation } from "@apollo/client";
-import { DELETE_BLOG } from "../../AddBlog/Components/graphql/addBlogMutation";
+import { DELETE_BLOG } from "../../AddBlog/graphql/addBlogMutation";
 import { useState } from "react";
 import { GET_BLOGS } from "../graphql/blogQuery";
 import ToastAlert from "../../../Components/ToastAlert/ToastAlert";

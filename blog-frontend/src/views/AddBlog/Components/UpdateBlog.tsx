@@ -1,7 +1,7 @@
 import { Box, Button, Divider, Tooltip } from "@mui/material";
 import { Heading } from "../../../Components/Heading";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_BLOG } from "./graphql/addBlogQuery";
+import { GET_BLOG } from "../graphql/addBlogQuery";
 import Spinner from "../../../Components/Spinner";
 import { useParams } from "react-router-dom";
 import {
@@ -20,7 +20,7 @@ import { MdOutlineEditCalendar } from "react-icons/md";
 import {
   ADD_COMMENT_TO_BLOG,
   DELETE_COMMENT_TO_BLOG,
-} from "./graphql/addBlogMutation";
+} from "../graphql/addBlogMutation";
 import ToastAlert from "../../../Components/ToastAlert/ToastAlert";
 import { GET_BLOGS } from "../../Blog/graphql/blogQuery";
 import { selectedUserId } from "../../../redux/auth/authSlice";

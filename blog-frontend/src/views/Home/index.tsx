@@ -28,13 +28,13 @@ function Home() {
             alt="Publish"
           />
           <Typography sx={homePageStyles.text}>
-            Write and Share Your Blog With Millions of People
+            Unveiling Unique Perspectives and Insights for a Curious Mind
           </Typography>
         </Box>
 
         <Box sx={homePageStyles.wrapper}>
           <Typography sx={homePageStyles.text}>
-            Write and Share Your Blog With Millions of People
+            Harness the power of social media to broadcast your unique insights
           </Typography>
           <img
             width="50%"

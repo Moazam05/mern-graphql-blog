@@ -24,21 +24,18 @@ Blog platform built with the MERN & GraphQL
 
 ![App Screenshot](https://i.postimg.cc/kGPjq0jn/login.png)
 
+
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file
+To run this project, you will need to add the following environment variables to your .env file.
 
 ### Backend ###
 
-
-```http
- NODE_ENV:  development
- PORT:      5000
- DATABASE:  Insert your MongoDB database connection link
+```env
+NODE_ENV:  development
+PORT:      5000
+DATABASE:  Insert your MongoDB database connection link
 ```
-
-
-
 
 ## Features
 
@@ -50,12 +47,11 @@ To run this project, you will need to add the following environment variables to
 
 
 
-
 ## API Reference (GraphQL)
 
 #### Get all Users
 
-```http
+```graphql
   {
   users {
     id
@@ -66,7 +62,7 @@ To run this project, you will need to add the following environment variables to
 ```
 #### Create New User
 
-```http
+```graphql
  mutation {
   signup(name: "Salman Muazam", email: "salmanmoazam08@gmail.com", password: "Test$1234") {
     id
@@ -78,7 +74,7 @@ To run this project, you will need to add the following environment variables to
 ```
 #### Login User
 
-```http
+```graphql
 mutation {
   login(email: "salmanmoazam08@gmail.com", password: "Test$1234") {
     id
@@ -90,7 +86,7 @@ mutation {
 ```
 #### Get all Blogs
 
-```http
+```graphql
   {
   blogs {
     id
@@ -103,7 +99,7 @@ mutation {
 
 #### Get all Comments
 
-```http
+```graphql
  {
   comments {
     id
@@ -120,7 +116,7 @@ You can look at the ⬇ below file reference.
 - Update Blog
 - Delete Blog etc.
 
-```http
+```graphql
 {
   blog-backend {
     src {
@@ -131,3 +127,11 @@ You can look at the ⬇ below file reference.
   }
 }
 ```
+
+<div align="center">
+
+---
+
+Made with ❤️ by Muazam
+
+</div>

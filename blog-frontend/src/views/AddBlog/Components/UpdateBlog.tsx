@@ -422,13 +422,9 @@ const UpdateBlog = () => {
                         deleteCommentHandler(comment.id);
                       }}
                     >
-                      {deleteCommentLoading ? (
-                        <Spinner size={20} />
-                      ) : (
-                        <MdDeleteOutline
-                          style={{ color: "#d32f2f", fontSize: "18px" }}
-                        />
-                      )}
+                      <MdDeleteOutline
+                        style={{ color: "#d32f2f", fontSize: "18px" }}
+                      />
                     </Box>
                   </Box>
                 </Box>

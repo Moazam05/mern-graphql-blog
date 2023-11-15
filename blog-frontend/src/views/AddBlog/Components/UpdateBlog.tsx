@@ -17,12 +17,16 @@ import * as Yup from "yup";
 import { IoPersonOutline } from "react-icons/io5";
 import { MdOutlineEmail } from "react-icons/md";
 import { MdOutlineEditCalendar } from "react-icons/md";
-import { ADD_COMMENT_TO_BLOG } from "./graphql/addBlogMutation";
+import {
+  ADD_COMMENT_TO_BLOG,
+  DELETE_COMMENT_TO_BLOG,
+} from "./graphql/addBlogMutation";
 import ToastAlert from "../../../Components/ToastAlert/ToastAlert";
 import { GET_BLOGS } from "../../Blog/graphql/blogQuery";
 import { selectedUserId } from "../../../redux/auth/authSlice";
 import useTypedSelector from "../../../hooks/useTypedSelector";
 import { AiOutlineBulb } from "react-icons/ai";
+import { MdDeleteOutline } from "react-icons/md";
 
 interface ISAddCommentForm {
   text: string;
@@ -59,6 +63,7 @@ const UpdateBlog = () => {
     },
   });
 
+  // Add Comment API Bind
   const [addCommentToBlog, { loading: commentLoading }] = useMutation(
     ADD_COMMENT_TO_BLOG,
     {
@@ -80,8 +85,9 @@ const UpdateBlog = () => {
     try {
       const response = await addCommentToBlog({
         variables: {
-          blogId: id,
           text: formData.text,
+          date: Date.now(),
+          blogId: id,
           userId: clientId,
         },
       });
@@ -102,6 +108,44 @@ const UpdateBlog = () => {
     }
   };
 
+  // Delete Comment API Bind
+  const [deleteComment, { loading: deleteCommentLoading }] = useMutation(
+    DELETE_COMMENT_TO_BLOG,
+    {
+      onError(error) {
+        setToast({
+          message: error.message,
+          appearence: true,
+          type: "error",
+        });
+      },
+      refetchQueries: [{ query: GET_BLOG }],
+    }
+  );
+
+  const deleteCommentHandler = async (id: string) => {
+    try {
+      const response = await deleteComment({
+        variables: {
+          id,
+        },
+      });
+      if (response.data) {
+        setToast({
+          message: "Comment deleted successfully",
+          appearence: true,
+          type: "success",
+        });
+      }
+    } catch (error) {
+      setToast({
+        message: "Something went wrong.",
+        appearence: true,
+        type: "error",
+      });
+    }
+  };
+
   if (loading)
     return (
       <Box sx={{ height: "50vh", marginTop: "25vh" }}>
@@ -109,6 +153,9 @@ const UpdateBlog = () => {
       </Box>
     );
   if (error) return <div>Something Went Wrong...!</div>;
+
+  console.log("data", data?.blog?.user?.id);
+  console.log("clientid", clientId);
 
   return (
     <>
@@ -323,28 +370,67 @@ const UpdateBlog = () => {
             </Box>
           )}
           {data?.blog?.comments?.length > 0 &&
-            data?.blog?.comments?.map((comment: any) => (
-              <Box>
+            data?.blog?.comments?.map((comment: any, id: number) => (
+              <Box key={id}>
                 <Box
                   sx={{
                     display: "flex",
                     alignItems: "center",
+                    justifyContent: "space-between",
                     margin: "20px 0 0 0",
                     gap: 1,
                   }}
                 >
-                  <Tooltip title={`${comment?.user?.name}`} placement="top">
+                  <Box sx={{ display: "flex" }}>
+                    <Tooltip title={`${comment?.user?.name}`} placement="top">
+                      <Box
+                        sx={{
+                          fontWeight: 700,
+                          minWidth: "50px",
+                        }}
+                      >
+                        {getInitials(comment?.user?.name)}
+                      </Box>
+                    </Tooltip>
+
+                    <Box>{comment?.text}</Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
                     <Box
                       sx={{
-                        fontWeight: 700,
                         minWidth: "50px",
+                        fontSize: "12px",
+                        color: "#a0a0a0",
+                        fontWeight: 500,
                       }}
                     >
-                      {getInitials(comment?.user?.name)}
+                      {parseAndFormatTimestamp(comment.date)}
                     </Box>
-                  </Tooltip>
-
-                  <Box>{comment?.text}</Box>
+                    <Box
+                      sx={{
+                        display:
+                          clientId === comment?.user?.id ? "block" : "none",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        deleteCommentHandler(comment.id);
+                      }}
+                    >
+                      {deleteCommentLoading ? (
+                        <Spinner size={20} />
+                      ) : (
+                        <MdDeleteOutline
+                          style={{ color: "#d32f2f", fontSize: "18px" }}
+                        />
+                      )}
+                    </Box>
+                  </Box>
                 </Box>
                 <Box
                   sx={{

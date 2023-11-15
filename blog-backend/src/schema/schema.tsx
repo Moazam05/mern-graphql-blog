@@ -248,15 +248,21 @@ const mutation = new GraphQLObjectType({
       type: CommentType,
       args: {
         text: { type: new GraphQLNonNull(GraphQLString) },
+        date: { type: new GraphQLNonNull(GraphQLString) },
         blogId: { type: new GraphQLNonNull(GraphQLID) },
         userId: { type: new GraphQLNonNull(GraphQLID) },
       },
-      async resolve(parent, { text, blogId, userId }) {
+      async resolve(parent, { text, date, blogId, userId }) {
         const session = await startSession();
         try {
           session.startTransaction({ session });
 
-          const comment = new Comment({ text, user: userId, blog: blogId });
+          const comment = new Comment({
+            text,
+            date,
+            user: userId,
+            blog: blogId,
+          });
 
           const existingBlog = await Blog.findById(blogId);
           if (!existingBlog) return new AppError("Blog not found", 404);

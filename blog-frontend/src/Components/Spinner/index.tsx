@@ -2,10 +2,14 @@
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 
-const Spinner = () => {
+interface Props {
+  size?: number;
+}
+
+const Spinner = (props: Props) => {
   return (
     <Box display="flex" justifyContent="center" alignItems="center">
-      <CircularProgress />
+      <CircularProgress size={props.size} />
     </Box>
   );
 };

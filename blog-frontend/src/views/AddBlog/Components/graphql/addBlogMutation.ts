@@ -15,6 +15,14 @@ const ADD_BLOG = gql`
   }
 `;
 
+const DELETE_BLOG = gql`
+  mutation deleteBlog($id: ID!) {
+    deleteBlog(id: $id) {
+      id
+    }
+  }
+`;
+
 const ADD_COMMENT_TO_BLOG = gql`
   mutation addCommentToBlog($text: String!, $userId: ID!, $blogId: ID!) {
     addCommentToBlog(text: $text, userId: $userId, blogId: $blogId) {
@@ -24,12 +32,12 @@ const ADD_COMMENT_TO_BLOG = gql`
   }
 `;
 
-const DELETE_BLOG = gql`
-  mutation deleteBlog($id: ID!) {
-    deleteBlog(id: $id) {
+const DELETE_COMMENT_TO_BLOG = gql`
+  mutation deleteComment($id: ID!) {
+    deleteComment(id: $id) {
       id
     }
   }
 `;
 
-export { ADD_BLOG, ADD_COMMENT_TO_BLOG, DELETE_BLOG };
+export { ADD_BLOG, DELETE_BLOG, ADD_COMMENT_TO_BLOG, DELETE_COMMENT_TO_BLOG };

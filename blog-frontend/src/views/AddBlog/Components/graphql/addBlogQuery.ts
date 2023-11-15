@@ -13,8 +13,11 @@ const GET_BLOG = gql`
         email
       }
       comments {
+        id
         text
+        date
         user {
+          id
           name
         }
       }

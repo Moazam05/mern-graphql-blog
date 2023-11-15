@@ -7,7 +7,7 @@ const commentSchema = new mongoose.Schema({
   },
   date: {
     type: Date,
-    default: Date.now(),
+    required: [true, "A Comment must have a date"],
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,

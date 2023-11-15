@@ -15,6 +15,7 @@ import { DELETE_BLOG } from "../../AddBlog/graphql/addBlogMutation";
 import { useState } from "react";
 import { GET_BLOGS } from "../graphql/blogQuery";
 import ToastAlert from "../../../Components/ToastAlert/ToastAlert";
+import Spinner from "../../../Components/Spinner";
 
 type Props = {
   blogs: BlogType[];
@@ -23,6 +24,8 @@ type Props = {
 const BlogList = (props: Props) => {
   const navigate = useNavigate();
   const userId = useTypedSelector(selectedUserId);
+  const [blogId, setBlogId] = useState("");
+
   const [toast, setToast] = useState({
     message: "",
     appearence: false,
@@ -143,7 +146,13 @@ const BlogList = (props: Props) => {
               </Box>
 
               <Box sx={{ margin: "20px 0 10px 0" }}>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 3,
+                  }}
+                >
                   <Button
                     onClick={() => {
                       navigate(`/blogs/${post.id}`);
@@ -156,19 +165,36 @@ const BlogList = (props: Props) => {
                     Learn More
                   </Button>
 
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    color="error"
-                    startIcon={<MdDeleteOutline />}
-                    sx={{ textTransform: "capitalize" }}
-                    disabled={userId !== post.user.id || loading}
-                    onClick={() => {
-                      deleteBlogHandler(post.id);
-                    }}
-                  >
-                    Delete
-                  </Button>
+                  {blogId === post.id && loading ? (
+                    <Box
+                      sx={{
+                        width: "100%",
+                        height: "36px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderRadius: "4px",
+                        border: "1px solid #d32f2f",
+                      }}
+                    >
+                      <Spinner size={20} color="warning" />
+                    </Box>
+                  ) : (
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      color="error"
+                      startIcon={<MdDeleteOutline />}
+                      sx={{ textTransform: "capitalize" }}
+                      disabled={userId !== post.user.id || loading}
+                      onClick={() => {
+                        setBlogId(post.id);
+                        deleteBlogHandler(post.id);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  )}
                 </Box>
               </Box>
             </Box>

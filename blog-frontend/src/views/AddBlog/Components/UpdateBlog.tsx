@@ -22,7 +22,6 @@ import {
   DELETE_COMMENT_TO_BLOG,
 } from "../graphql/addBlogMutation";
 import ToastAlert from "../../../Components/ToastAlert/ToastAlert";
-import { GET_BLOGS } from "../../Blog/graphql/blogQuery";
 import { selectedUserId } from "../../../redux/auth/authSlice";
 import useTypedSelector from "../../../hooks/useTypedSelector";
 import { AiOutlineBulb } from "react-icons/ai";
@@ -42,6 +41,7 @@ const commentSchema = Yup.object().shape({
 const UpdateBlog = () => {
   const { id } = useParams();
   const clientId = useTypedSelector(selectedUserId);
+  const [commentId, setCommentId] = useState("");
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [formValues, setFormValues] = useState<ISAddCommentForm>({
@@ -67,6 +67,21 @@ const UpdateBlog = () => {
   const [addCommentToBlog, { loading: commentLoading }] = useMutation(
     ADD_COMMENT_TO_BLOG,
     {
+      onCompleted: () => {
+        setToast({
+          message: "Comment added successfully",
+          appearence: true,
+          type: "success",
+        });
+      },
+      refetchQueries: [
+        {
+          query: GET_BLOG,
+          variables: {
+            id,
+          },
+        },
+      ],
       onError(error) {
         setToast({
           message: error.message,
@@ -74,7 +89,6 @@ const UpdateBlog = () => {
           type: "error",
         });
       },
-      refetchQueries: [{ query: GET_BLOGS }],
     }
   );
 
@@ -92,11 +106,6 @@ const UpdateBlog = () => {
         },
       });
       if (response.data) {
-        setToast({
-          message: "Comment added successfully",
-          appearence: true,
-          type: "success",
-        });
         resetForm();
       }
     } catch (error) {
@@ -112,6 +121,21 @@ const UpdateBlog = () => {
   const [deleteComment, { loading: deleteCommentLoading }] = useMutation(
     DELETE_COMMENT_TO_BLOG,
     {
+      onCompleted: () => {
+        setToast({
+          message: "Comment deleted successfully",
+          appearence: true,
+          type: "success",
+        });
+      },
+      refetchQueries: [
+        {
+          query: GET_BLOG,
+          variables: {
+            id,
+          },
+        },
+      ],
       onError(error) {
         setToast({
           message: error.message,
@@ -119,24 +143,16 @@ const UpdateBlog = () => {
           type: "error",
         });
       },
-      refetchQueries: [{ query: GET_BLOG }],
     }
   );
 
   const deleteCommentHandler = async (id: string) => {
     try {
-      const response = await deleteComment({
+      await deleteComment({
         variables: {
           id,
         },
       });
-      if (response.data) {
-        setToast({
-          message: "Comment deleted successfully",
-          appearence: true,
-          type: "success",
-        });
-      }
     } catch (error) {
       setToast({
         message: "Something went wrong.",
@@ -153,9 +169,6 @@ const UpdateBlog = () => {
       </Box>
     );
   if (error) return <div>Something Went Wrong...!</div>;
-
-  console.log("data", data?.blog?.user?.id);
-  console.log("clientid", clientId);
 
   return (
     <>
@@ -412,20 +425,27 @@ const UpdateBlog = () => {
                     >
                       {parseAndFormatTimestamp(comment.date)}
                     </Box>
-                    <Box
-                      sx={{
-                        display:
-                          clientId === comment?.user?.id ? "block" : "none",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => {
-                        deleteCommentHandler(comment.id);
-                      }}
-                    >
-                      <MdDeleteOutline
-                        style={{ color: "#d32f2f", fontSize: "18px" }}
-                      />
-                    </Box>
+                    <Tooltip title="Delete Comment" placement="top">
+                      <Box
+                        sx={{
+                          display:
+                            clientId === comment?.user?.id ? "block" : "none",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          setCommentId(comment.id);
+                          deleteCommentHandler(comment.id);
+                        }}
+                      >
+                        {commentId === comment.id && deleteCommentLoading ? (
+                          <Spinner size={20} />
+                        ) : (
+                          <MdDeleteOutline
+                            style={{ color: "#d32f2f", fontSize: "18px" }}
+                          />
+                        )}
+                      </Box>
+                    </Tooltip>
                   </Box>
                 </Box>
                 <Box

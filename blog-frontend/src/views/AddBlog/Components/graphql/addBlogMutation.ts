@@ -24,10 +24,21 @@ const DELETE_BLOG = gql`
 `;
 
 const ADD_COMMENT_TO_BLOG = gql`
-  mutation addCommentToBlog($text: String!, $userId: ID!, $blogId: ID!) {
-    addCommentToBlog(text: $text, userId: $userId, blogId: $blogId) {
+  mutation addCommentToBlog(
+    $text: String!
+    $date: String!
+    $userId: ID!
+    $blogId: ID!
+  ) {
+    addCommentToBlog(
+      text: $text
+      date: $date
+      userId: $userId
+      blogId: $blogId
+    ) {
       id
       text
+      date
     }
   }
 `;

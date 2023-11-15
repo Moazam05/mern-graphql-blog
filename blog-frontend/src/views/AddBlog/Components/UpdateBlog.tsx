@@ -86,7 +86,7 @@ const UpdateBlog = () => {
       const response = await addCommentToBlog({
         variables: {
           text: formData.text,
-          date: Date.now(),
+          date: String(Date.now()),
           blogId: id,
           userId: clientId,
         },
